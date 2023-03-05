@@ -2,6 +2,7 @@ import speech_recognition as sr
 import pyttsx3
 from tkinter import *
 
+
 def main():
 	print(">>> Initiating Marseille...")
 	GUI()

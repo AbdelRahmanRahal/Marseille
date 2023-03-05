@@ -12,7 +12,8 @@ def GUI():
 	wndw.title("Marseille")
 	wndw.geometry("500x500")
 	wndw.iconbitmap("rose.ico")
-	wndw.configure(bg="#FFFAF8")
+	wndw.configure(bg="#EFF1FF")
+
 
 	# ————— WINDOW INITIATION —————
 	wndw.mainloop()
@@ -34,10 +35,11 @@ def Listen():
 				if text != []:
 					active = False
 					return text
-				
+
 		except sr.UnknownValueError:
 			print("Sorry, I didn't catch that.\n")
 			recognizer = sr.Recognizer()
 			continue
 
-main()
+if __name__ == "__main__":
+    exit(main())

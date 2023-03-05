@@ -26,12 +26,12 @@ def Listen():
 	while active:
 		try:
 			with sr.Microphone() as mic:
-				recognizer.adjust_for_ambient_noise(mic, duration = 0.1)
+				recognizer.adjust_for_ambient_noise(mic, duration=0.1)
 				audio = recognizer.listen(mic)
 
 				text = recognizer.recognize_google(audio)
 
-				if text != "":
+				if text != []:
 					active = False
 					return text
 				

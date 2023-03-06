@@ -13,7 +13,6 @@ def main():
 # ————— GUI WINDOW FUNCTION —————
 def GUI():
 	# ————— GUI WINDOW SETTINGS —————
-	global wndw
 	wndw = Tk()
 	wndw.title("Marseille")
 	wndw.geometry("500x500")
@@ -59,18 +58,23 @@ def GUI():
 	textbox.config(highlightthickness = 0, highlightbackground = "#000793")
 	textbox.pack(ipady = 10)
 
+	global button_text
+	button_text = StringVar()
+	button_text.set("Listen")
+
 	sbmt = Button(
-		text="Listen",
-		font=("Mistral", 16),
-		fg="#FFFAF6",
-		bg="#BB1F1F",
-		activeforeground="#FFFAF6",
-		activebackground="#9E1A1A",
-		bd=3,
-		relief="ridge",
-		command=Output
+		textvariable = button_text,
+		font = ("Anaheim", 15, "bold"),
+		fg = "#FFFAF6",
+		bg = "#BB1F1F",
+		activeforeground = "#FFFAF6",
+		activebackground = "#9E1A1A",
+		width = 10,
+		bd = 3,
+		relief = "ridge",
+		command = lambda: Click("Listening")
 	)
-	sbmt.pack(pady=15, ipadx=15)
+	sbmt.pack(pady = 15, ipadx = 15)
 
 	# ————— WINDOW INITIATION —————
 	wndw.mainloop()
@@ -97,20 +101,30 @@ def Listen():
 			recognizer = sr.Recognizer()
 			continue
 
+def Click(button_state):
+	match button_state:
+		case "Listening":
+			button_text.set("Listening")
+			textbox.tksleep(0.1)
+			Output()
+			Click("default")
+		case _:
+			button_text.set("Listen")
+
 def Output():
-	def text():
-		textbox.insert(END, word + " ")
 	output_list = Listen().split()
 	print(output_list)
-	textbox.delete(0, END)
 
+	textbox.delete(0, END)
 	for word in output_list:
-		# wndw.after(800, lambda: textbox.insert(END, word + " "))
-		textbox.after(1000, text)
-	# for word in output_list:
-		
-	# textbox.delete(0, END)
-	# textbox.insert(END, "Hello world!!")
+		textbox.insert(END, word + " ")
+		textbox.tksleep(0.1)
+
+# ————— SLEEP FUNCTION FOR TKINTER —————
+def tksleep(self, time:float) -> None:
+	self.after(int(time*1000), self.quit)
+	self.mainloop()
+Misc.tksleep = tksleep
 
 if __name__ == "__main__":
 	sys.exit(main())

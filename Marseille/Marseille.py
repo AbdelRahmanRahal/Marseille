@@ -49,7 +49,7 @@ def GUI():
 	textbox_value = StringVar()
 	textbox_value.set("")
 
-	textbox = Entry(
+	textbox = Label(
 		master = wndw,
 		textvariable = textbox_value, #32 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),

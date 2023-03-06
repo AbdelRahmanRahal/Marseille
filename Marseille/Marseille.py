@@ -1,8 +1,8 @@
+# ————— LIBRARY AND MODULE CALLS —————
 import speech_recognition as sr
-import pyglet, pyttsx3, sys
+import os, pyglet, pyttsx3, sys
 from tkinter import *
 from PIL import ImageTk, Image
-from time import sleep
 
 
 # ————— MAIN FUNCTION —————
@@ -16,25 +16,25 @@ def GUI():
 	wndw = Tk()
 	wndw.title("Marseille")
 	wndw.geometry("500x500")
-	wndw.iconbitmap("rose.ico")
+	wndw.iconbitmap("Media/rose.ico")
 	wndw.configure(bg = "#F3F4FA")
 	pyglet.font.add_file("Anaheim-Regular.ttf")
 
 	# ————— FRAME TO CONTAIN THE TITLE AND THE ICON —————
 	titleFrame = Frame(wndw, bg = "#F3F4FA")
-	titleFrame.pack(pady = 45)
 
-	image1 = Image.open("rose.png")
-	image1 = image1.resize((50, 50), Image.LANCZOS)
-	image1 = ImageTk.PhotoImage(image1)
-	panel = Label(
+	# ————— ROSE ICON —————
+	rose_icon = Image.open("Media/rose.png")
+	rose_icon = rose_icon.resize((50, 50), Image.LANCZOS)
+	rose_icon = ImageTk.PhotoImage(rose_icon)
+	rose_panel = Label(
 		master = titleFrame,
-		image = image1,
+		image = rose_icon,
 		bg = "#F3F4FA"
 	)
-	panel.image = image1
-	panel.pack(side = LEFT)
+	rose_panel.image = rose_icon
 
+	# ————— MARSEILLE TITLE —————
 	titlelabel = Label(
 		master = titleFrame,
 		text = "Marseille",
@@ -42,49 +42,55 @@ def GUI():
 		fg = "#CB0025",
 		bg = "#F3F4FA",
 	)
-	titlelabel.pack(side = RIGHT)
 
-	# ————— OUTPUT AREA (NOT DONE, I HAVE TO GO TO SLEEP) —————
-	global textbox_value
-	textbox_value = StringVar()
-	textbox_value.set("")
-
-	textbox = Label(
-		master = wndw,
-		textvariable = textbox_value, #32 characters is the max amount of characters for this label at this font size
+	# ————— OUTPUT AREA —————
+	global textbox
+	textbox = Entry(
+		master = wndw, #30 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
 		width = 30,
-		height = 2,
 		justify = CENTER,
 		bd = 0
 	)
 	textbox.config(highlightthickness = 0, highlightbackground = "#000793")
-	textbox.pack()
 
-	sbmt = Button(
-	text="Send",
-	font=("Mistral", 16),
-	fg="#FFFAF6",
-	bg="#BB1F1F",
-	activeforeground="#FFFAF6",
-	activebackground="#9E1A1A",
-	bd=3,
-	relief='ridge',
-	command=Output("huh")
+	# ————— MIC IMAGES —————
+	# ————— ACTIVE MIC —————
+	active_mic = Image.open("Media/mic_active.png")
+	active_mic = active_mic.resize((55, 55), Image.LANCZOS)
+	active_mic = ImageTk.PhotoImage(active_mic)
+	# ————— INACTIVE MIC —————
+	inactive_mic = Image.open("Media/mic_inactive.png")
+	inactive_mic = inactive_mic.resize((55, 55), Image.LANCZOS)
+	inactive_mic = ImageTk.PhotoImage(inactive_mic)
+
+	# ————— MIC BUTTON —————
+	listenbutton = Label(
+		master = wndw,
+		image = inactive_mic,
+		bg = "#F3F4FA"
 	)
-	sbmt.pack(pady=15, ipadx=15)
+	listenbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", listenbutton, active_mic, inactive_mic))
 
-	# ————— WINDOW INITIATION —————
+	# ————— GUI WINDOW INITIATION —————
+	titleFrame.pack(pady = 45)
+	rose_panel.pack(side = LEFT)
+	titlelabel.pack(side = RIGHT)
+	textbox.pack(ipady = 10)
+	listenbutton.pack(pady = 20)
+
 	wndw.mainloop()
-	return 0
+
+	return
 
 # ————— SPEECH RECOGNITION FUNCTION —————
 def Listen():
 	active = True
 	recognizer = sr.Recognizer()
 
+	# ————— VOICE-TO-TEXT CONVERTER —————
 	while active:
 		try:
 			with sr.Microphone() as mic:
@@ -96,15 +102,49 @@ def Listen():
 					active = False
 					return converted_text
 
+		# ————— REDO THE FUNCTION WHEN IT GETS UNRECOGNISED INPUT —————
 		except sr.UnknownValueError:
-			print("Sorry, I didn't catch that.\n")
+			Output("Sorry, I didn't catch that.")
 			recognizer = sr.Recognizer()
 			continue
 
-def Output(text_to_output):
-	output_list = text_to_output.split()
-	# for word in output_list:
-	textbox_value.set("HELLOW WORLD!")
+# ————— MIC ANIMATION AND ACTIVATION FUNCTION —————
+def Mic_Press(button_state, button, active_mic, inactive_mic):
+	match button_state:
+		case "Listening":
+			button.configure(image = active_mic)
+			button.image = active_mic
+			textbox.tksleep(0.1)
+			Output(Listen())
+			Mic_Press("default", button, active_mic, inactive_mic)
+		case _:
+			button.configure(image = inactive_mic)
+			button.image = inactive_mic
+	return
 
+# ————— CONVERTED TEXT OUTPUT FUNCTION —————
+def Output(output_text):
+	output_list = output_text.split()
+	print(output_list)
+
+	textbox.delete(0, END)
+	for word in output_list:
+		textbox.insert(END, word + " ")
+		textbox.tksleep(0.1)
+	return
+
+# ————— SLEEP FUNCTION FOR TKINTER —————
+def tksleep(self, time:float) -> None:
+	self.after(int(time*1000), self.quit)
+	self.mainloop()
+Misc.tksleep = tksleep
+
+# ————— GET FULL PATH FUNCTION (NOT USED YET, BUT I SUSPECT I'LL HAVE TO USE IT LATER) —————
+def Full_Path(relative_path):
+	absolute_path = os.path.dirname(__file__)
+	return os.path.join(absolute_path, relative_path)
+
+
+# ————— PROGRAM INITIATION —————
 if __name__ == "__main__":
 	sys.exit(main())

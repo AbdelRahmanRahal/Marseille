@@ -13,6 +13,7 @@ def main():
 # ————— GUI WINDOW FUNCTION —————
 def GUI():
 	# ————— GUI WINDOW SETTINGS —————
+	global wndw
 	wndw = Tk()
 	wndw.title("Marseille")
 	wndw.geometry("500x500")
@@ -45,17 +46,13 @@ def GUI():
 	titlelabel.pack(side = RIGHT)
 
 	# ————— OUTPUT AREA (NOT DONE, I HAVE TO GO TO SLEEP) —————
-	global textbox_value
-	textbox_value = StringVar()
-	textbox_value.set("")
-
+	global textbox
 	textbox = Entry(
 		master = wndw, #30 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
 		width = 30,
-		# height = 2,
 		justify = CENTER,
 		bd = 0
 	)
@@ -63,15 +60,15 @@ def GUI():
 	textbox.pack(ipady = 10)
 
 	sbmt = Button(
-	text="Send",
-	font=("Mistral", 16),
-	fg="#FFFAF6",
-	bg="#BB1F1F",
-	activeforeground="#FFFAF6",
-	activebackground="#9E1A1A",
-	bd=3,
-	relief='ridge',
-	command=Output("huh")
+		text="Listen",
+		font=("Mistral", 16),
+		fg="#FFFAF6",
+		bg="#BB1F1F",
+		activeforeground="#FFFAF6",
+		activebackground="#9E1A1A",
+		bd=3,
+		relief="ridge",
+		command=Output
 	)
 	sbmt.pack(pady=15, ipadx=15)
 
@@ -100,10 +97,20 @@ def Listen():
 			recognizer = sr.Recognizer()
 			continue
 
-def Output(text_to_output):
-	output_list = text_to_output.split()
+def Output():
+	def text():
+		textbox.insert(END, word + " ")
+	output_list = Listen().split()
+	print(output_list)
+	textbox.delete(0, END)
+
+	for word in output_list:
+		# wndw.after(800, lambda: textbox.insert(END, word + " "))
+		textbox.after(1000, text)
 	# for word in output_list:
-	textbox_value.set("HELLOW WORLD!")
+		
+	# textbox.delete(0, END)
+	# textbox.insert(END, "Hello world!!")
 
 if __name__ == "__main__":
 	sys.exit(main())

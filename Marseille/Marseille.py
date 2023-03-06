@@ -50,18 +50,17 @@ def GUI():
 	textbox_value.set("")
 
 	textbox = Entry(
-		master = wndw,
-		textvariable = textbox_value, #32 characters is the max amount of characters for this label at this font size
+		master = wndw, #30 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
 		width = 30,
-		height = 2,
+		# height = 2,
 		justify = CENTER,
 		bd = 0
 	)
 	textbox.config(highlightthickness = 0, highlightbackground = "#000793")
-	textbox.pack()
+	textbox.pack(ipady = 10)
 
 	sbmt = Button(
 	text="Send",

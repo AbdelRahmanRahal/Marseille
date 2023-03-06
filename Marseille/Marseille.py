@@ -21,7 +21,7 @@ def GUI():
 
 	# ————— FRAME TO CONTAIN THE TITLE AND THE ICON —————
 	titleFrame = Frame(wndw, bg = "#F3F4FA")
-	titleFrame.pack()
+	titleFrame.pack(pady = 45)
 
 	image1 = Image.open("rose.png")
 	image1 = image1.resize((50, 50), Image.LANCZOS)
@@ -46,15 +46,16 @@ def GUI():
 	# ————— OUTPUT AREA (NOT DONE, I HAVE TO GO TO SLEEP) —————
 	txtbox = Label(
 		master = wndw,
-		text = "test text",
-		font = ("Anaheim", 20),
-		fg = "#470FF4",
-		bg = "#E8EAFB",
-		width = 25,
-		# justify = CENTER,
+		text = "Hi! How can I help you?", #32 characters is the max amount of characters for this label at this font size
+		font = ("Anaheim", 17),
+		fg = "#700018",
+		bg = "#E8D1D9",
+		width = 30,
+		height = 2,
+		justify = CENTER,
 		bd = 0
 	)
-	txtbox.config(highlightthickness = 0, highlightbackground = "#BB1F1F")
+	txtbox.config(highlightthickness = 0, highlightbackground = "#000793")
 	txtbox.pack()
 
 	# ————— WINDOW INITIATION —————

@@ -16,7 +16,7 @@ setup(
     long_description_content_type = "text/markdown",
     long_description = long_description,
     packages = find_packages(),
-    install_requires = ['speechrecognition', 'pyttsx3', 'tkinter'],
+    install_requires = ['pillow', 'pyglet', 'pyttsx3', 'speechrecognition', 'sys', 'tkinter'],
     keywords = ['python', 'Marseille', 'voice assistant', 'bot', 'voice assistant bot', 'ai', 'speech recognition'],
     classifiers = [
         "Development Status :: 1 - Planning",

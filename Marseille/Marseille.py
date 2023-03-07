@@ -3,6 +3,7 @@ import speech_recognition as sr
 import os, pyglet, pyttsx3, sys
 from tkinter import *
 from PIL import ImageTk, Image
+from gingerit.gingerit import GingerIt
 
 
 # ————— MAIN FUNCTION —————
@@ -98,22 +99,11 @@ def Mic_Press(button_state, button, active_mic, inactive_mic):
 			button.configure(image = active_mic)
 			button.image = active_mic
 			textbox.tksleep(0.1)
-			Output(Listen())
+			Output(Grammar_Check(Listen()))
 			Mic_Press("default", button, active_mic, inactive_mic)
 		case _:
 			button.configure(image = inactive_mic)
 			button.image = inactive_mic
-	return
-
-# ————— CONVERTED TEXT OUTPUT FUNCTION —————
-def Output(output_text):
-	output_list = output_text.split()
-	print(output_list)
-
-	textbox.delete(0, END)
-	for word in output_list:
-		textbox.insert(END, word + " ")
-		textbox.tksleep(0.1)
 	return
 
 # ————— SPEECH RECOGNITION FUNCTION —————
@@ -138,6 +128,23 @@ def Listen():
 			Output("Sorry, I didn't catch that.")
 			recognizer = sr.Recognizer()
 			continue
+
+# ————— CONVERTED TEXT OUTPUT FUNCTION —————
+def Output(output_text):
+	output_list = output_text.split()
+	print(output_list)
+
+	textbox.delete(0, END)
+	for word in output_list:
+		textbox.insert(END, word + " ")
+		textbox.tksleep(0.1)
+	return
+
+def Grammar_Check(output_text):
+	parser = GingerIt()
+	corrected_text = parser.parse(output_text)
+
+	return corrected_text["result"]
 
 # ————— GET FULL PATH FUNCTION (NOT USED YET, BUT I SUSPECT I'LL HAVE TO USE IT LATER) —————
 def Full_Path(relative_path):

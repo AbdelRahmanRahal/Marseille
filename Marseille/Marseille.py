@@ -119,7 +119,7 @@ def Listen():
 				audio = recognizer.listen(mic)
 				converted_text = recognizer.recognize_google(audio)
 
-				if converted_text != []:
+				if converted_text != [] or "":
 					active = False
 					return converted_text
 

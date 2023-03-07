@@ -141,10 +141,18 @@ def Output(output_text):
 	return
 
 def Grammar_Check(output_text):
-	parser = GingerIt()
-	corrected_text = parser.parse(output_text)
+	try:
+		parser = GingerIt()
+		corrected_text = parser.parse(output_text)
 
-	return corrected_text["result"]
+		return corrected_text["result"]
+
+	except:
+		Output("Sorry, I encountered an error.")
+		textbox.tksleep(2)
+		Output("Try again.")
+
+		return 7
 
 # ————— GET FULL PATH FUNCTION (NOT USED YET, BUT I SUSPECT I'LL HAVE TO USE IT LATER) —————
 def Full_Path(relative_path):

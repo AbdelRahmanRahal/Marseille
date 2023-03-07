@@ -85,28 +85,11 @@ def GUI():
 
 	return
 
-# ————— SPEECH RECOGNITION FUNCTION —————
-def Listen():
-	active = True
-	recognizer = sr.Recognizer()
-
-	# ————— VOICE-TO-TEXT CONVERTER —————
-	while active:
-		try:
-			with sr.Microphone() as mic:
-				recognizer.adjust_for_ambient_noise(mic, duration = 0.1)
-				audio = recognizer.listen(mic)
-				converted_text = recognizer.recognize_google(audio)
-
-				if converted_text != []:
-					active = False
-					return converted_text
-
-		# ————— REDO THE FUNCTION WHEN IT GETS UNRECOGNISED INPUT —————
-		except sr.UnknownValueError:
-			Output("Sorry, I didn't catch that.")
-			recognizer = sr.Recognizer()
-			continue
+# ————— SLEEP FUNCTION FOR TKINTER —————
+def tksleep(self, time:float) -> None:
+	self.after(int(time*1000), self.quit)
+	self.mainloop()
+Misc.tksleep = tksleep
 
 # ————— MIC ANIMATION AND ACTIVATION FUNCTION —————
 def Mic_Press(button_state, button, active_mic, inactive_mic):
@@ -133,11 +116,28 @@ def Output(output_text):
 		textbox.tksleep(0.1)
 	return
 
-# ————— SLEEP FUNCTION FOR TKINTER —————
-def tksleep(self, time:float) -> None:
-	self.after(int(time*1000), self.quit)
-	self.mainloop()
-Misc.tksleep = tksleep
+# ————— SPEECH RECOGNITION FUNCTION —————
+def Listen():
+	active = True
+	recognizer = sr.Recognizer()
+
+	# ————— VOICE-TO-TEXT CONVERTER —————
+	while active:
+		try:
+			with sr.Microphone() as mic:
+				recognizer.adjust_for_ambient_noise(mic, duration = 0.1)
+				audio = recognizer.listen(mic)
+				converted_text = recognizer.recognize_google(audio)
+
+				if converted_text != []:
+					active = False
+					return converted_text
+
+		# ————— REDO THE FUNCTION WHEN IT GETS UNRECOGNISED INPUT —————
+		except sr.UnknownValueError:
+			Output("Sorry, I didn't catch that.")
+			recognizer = sr.Recognizer()
+			continue
 
 # ————— GET FULL PATH FUNCTION (NOT USED YET, BUT I SUSPECT I'LL HAVE TO USE IT LATER) —————
 def Full_Path(relative_path):

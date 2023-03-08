@@ -1,25 +1,18 @@
 import os
 from gtts import gTTS
 from mutagen.mp3 import MP3
-import pygame, time
+from pygame import init, mixer
+from time import sleep
 
-mytext = "Hi! How are you?"
-language = "en"
-myobj = gTTS(text = mytext, lang = language, slow = False)
+reply_text = "Hello world!"
+tts_language = "en"
+reply_mp3 = gTTS(text = reply_text, lang = tts_language, slow = False)
 
-myobj.save("Hello.mp3")
-audio = MP3("Hello.mp3")
-print(audio.info.length)
-pygame.init()
-pygame.mixer.music.load("Hello.mp3")
-pygame.mixer.music.play()
-time.sleep(audio.info.length + 1)
-pygame.mixer.music.fadeout(audio.info.length + 1)
-
-# music = pyglet.resource.media("Hello.mp3")
-# music.play()
-# pyglet.app.run(STOP())
-
-
-# pyglet.app.event_loop.sleep(2)
-# os.popen("mpg321 Hello.mp3", "w")
+reply_mp3.save("Media/TTS.mp3")
+converted_audio = MP3("Media/TTS.mp3")
+print(converted_audio.info.length)
+init()
+mixer.music.load("Media/TTS.mp3")
+mixer.music.play()
+sleep(int(converted_audio.info.length + 1))
+mixer.music.fadeout(1)

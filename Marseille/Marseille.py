@@ -1,9 +1,13 @@
 # ————— LIBRARY AND MODULE CALLS —————
 import speech_recognition as sr
 import os, pyglet, pyttsx3, sys
-from tkinter import *
-from PIL import ImageTk, Image
 from gingerit.gingerit import GingerIt
+from gtts import gTTS
+from mutagen.mp3 import MP3
+from PIL import ImageTk, Image
+from pygame import init, mixer
+from time import sleep
+from tkinter import *
 
 
 # ————— MAIN FUNCTION —————
@@ -140,6 +144,20 @@ def Output(output_text):
 		textbox.tksleep(0.1)
 	return
 
+# ————— CONVERT REPLY TTS —————
+def TTS_Output(reply_text, tts_language):
+	reply_mp3 = gTTS(text = reply_text, lang = tts_language, slow = False)
+	reply_mp3.save("Media/TTS.mp3")
+	converted_audio = MP3("Media/TTS.mp3")
+
+	# ————— AUDIO INITIATION —————
+	init()
+	mixer.music.load("Media/TTS.mp3")
+	mixer.music.play()
+	sleep(int(converted_audio.info.length + 1))
+	mixer.music.fadeout(1)
+
+# ————— GRAMMAR CORRECTION —————
 def Grammar_Check(output_text):
 	try:
 		parser = GingerIt()

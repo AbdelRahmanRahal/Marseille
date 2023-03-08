@@ -4,7 +4,7 @@ import os, pyglet, pyttsx3, sys
 from gingerit.gingerit import GingerIt
 from gtts import gTTS
 from mutagen.mp3 import MP3
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image as IMG
 from pygame import init, mixer
 from time import sleep
 from tkinter import *
@@ -29,8 +29,8 @@ def GUI():
 	titleFrame = Frame(wndw, bg = "#F3F4FA")
 
 	# ————— ROSE ICON —————
-	rose_icon = Image.open("Media/rose.png")
-	rose_icon = rose_icon.resize((50, 50), Image.LANCZOS)
+	rose_icon = IMG.open("Media/rose.png")
+	rose_icon = rose_icon.resize((50, 50), IMG.LANCZOS)
 	rose_icon = ImageTk.PhotoImage(rose_icon)
 	rose_panel = Label(
 		master = titleFrame,
@@ -63,12 +63,12 @@ def GUI():
 
 	# ————— MIC IMAGES —————
 	# ————— ACTIVE MIC —————
-	active_mic = Image.open("Media/mic_active.png")
-	active_mic = active_mic.resize((55, 55), Image.LANCZOS)
+	active_mic = IMG.open("Media/mic_active.png")
+	active_mic = active_mic.resize((55, 55), IMG.LANCZOS)
 	active_mic = ImageTk.PhotoImage(active_mic)
 	# ————— INACTIVE MIC —————
-	inactive_mic = Image.open("Media/mic_inactive.png")
-	inactive_mic = inactive_mic.resize((55, 55), Image.LANCZOS)
+	inactive_mic = IMG.open("Media/mic_inactive.png")
+	inactive_mic = inactive_mic.resize((55, 55), IMG.LANCZOS)
 	inactive_mic = ImageTk.PhotoImage(inactive_mic)
 
 	# ————— MIC BUTTON —————

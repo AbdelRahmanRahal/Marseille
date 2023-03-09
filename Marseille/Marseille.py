@@ -64,7 +64,7 @@ def GUI():
 		justify = LEFT,
 		bd = 0
 	)
-	textbox.config(highlightthickness = 0, highlightbackground = "#000793")
+	textbox.config(insertbackground = "#700018")
 
 	# ————— BUTTON IMAGES —————
 	# ————— SEND BUTTON IMAGES —————

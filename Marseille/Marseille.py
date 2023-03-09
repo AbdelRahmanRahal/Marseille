@@ -5,6 +5,7 @@ from gingerit.gingerit import GingerIt
 from gtts import gTTS
 from mutagen.mp3 import MP3
 from PIL import ImageTk, Image as PIL_Image
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Cancel the pygame welcome message, sorry it was getting on my nerves :(
 from pygame import init, mixer
 from time import sleep
 from tkinter import *
@@ -12,7 +13,7 @@ from tkinter import *
 
 # ————— MAIN FUNCTION —————
 def main():
-	print(">>> Initiating Marseille...")
+	print(">>> Initialising Marseille...")
 	GUI()
 
 # ————— GUI WINDOW FUNCTION —————
@@ -20,10 +21,10 @@ def GUI():
 	# ————— GUI WINDOW SETTINGS —————
 	wndw = Tk()
 	wndw.title("Marseille")
-	wndw.geometry("600x500")
+	wndw.geometry("600x400")
 	wndw.iconbitmap("Media/rose.ico")
 	wndw.configure(bg = "#F3F4FA")
-	pyglet.font.add_file("Anaheim-Regular.ttf")
+	pyglet.font.add_file("Media/Anaheim-Regular.ttf")
 
 	# ————— TITLE AREA —————
 	# ————— FRAME TO CONTAIN THE TITLE AND THE ICON —————
@@ -56,60 +57,63 @@ def GUI():
 	# ————— TEXTBOX —————
 	global textbox
 	textbox = Entry(
-		master = textboxframe, #30 characters is the max amount of characters for this label at this font size
+		master = textboxframe, #27 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
-		width = 30,
+		width = 29,
 		justify = LEFT,
-		bd = 0
+		bd = 9,
+		relief = FLAT
 	)
 	textbox.config(insertbackground = "#700018")
 
 	# ————— BUTTON IMAGES —————
 	# ————— SEND BUTTON IMAGES —————
 	# ————— CLICKED SEND —————
-	clicked_send = PIL_Image.open("Media/send_clicked.png")
-	clicked_send = clicked_send.resize((40, 40), PIL_Image.LANCZOS)
-	clicked_send = ImageTk.PhotoImage(clicked_send)
+	GUI.clicked_send = PIL_Image.open("Media/send_clicked.png")
+	GUI.clicked_send = GUI.clicked_send.resize((30, 30), PIL_Image.LANCZOS)
+	GUI.clicked_send = ImageTk.PhotoImage(GUI.clicked_send)
 	# ————— DEFAULT MIC —————
-	default_send = PIL_Image.open("Media/send_default.png")
-	default_send = default_send.resize((30, 30), PIL_Image.LANCZOS)
-	default_send = ImageTk.PhotoImage(default_send)
+	GUI.default_send = PIL_Image.open("Media/send_default.png")
+	GUI.default_send = GUI.default_send.resize((30, 30), PIL_Image.LANCZOS)
+	GUI.default_send = ImageTk.PhotoImage(GUI.default_send)
 
 	# ————— MIC BUTTON IMAGES —————
 	# ————— ACTIVE MIC —————
-	active_mic = PIL_Image.open("Media/mic_active.png")
-	active_mic = active_mic.resize((40, 40), PIL_Image.LANCZOS)
-	active_mic = ImageTk.PhotoImage(active_mic)
+	GUI.active_mic = PIL_Image.open("Media/mic_active.png")
+	GUI.active_mic = GUI.active_mic.resize((40, 40), PIL_Image.LANCZOS)
+	GUI.active_mic = ImageTk.PhotoImage(GUI.active_mic)
 	# ————— INACTIVE MIC —————
-	inactive_mic = PIL_Image.open("Media/mic_inactive.png")
-	inactive_mic = inactive_mic.resize((40, 40), PIL_Image.LANCZOS)
-	inactive_mic = ImageTk.PhotoImage(inactive_mic)
+	GUI.inactive_mic = PIL_Image.open("Media/mic_inactive.png")
+	GUI.inactive_mic = GUI.inactive_mic.resize((40, 40), PIL_Image.LANCZOS)
+	GUI.inactive_mic = ImageTk.PhotoImage(GUI.inactive_mic)
 
+	# ————— BUTTONS —————
 	# ————— SEND BUTTON —————
 	sendbutton = Label(
 		master = textboxframe,
-		image = default_send,
+		image = GUI.default_send,
 		bg = "#E8D1D9",
 		height = 48
 	)
-	sendbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", micbutton, active_mic, inactive_mic))
+	sendbutton.bind("<Button-1>", lambda event: Button_Press("Sending", sendbutton))
+
 	# ————— MIC BUTTON —————
 	micbutton = Label(
 		master = textboxframe,
-		image = inactive_mic,
+		image = GUI.inactive_mic,
 		bg = "#E8D1D9",
 		height = 48
 	)
-	micbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", micbutton, active_mic, inactive_mic))
+	micbutton.bind("<Button-1>", lambda event: Button_Press("Listening", micbutton))
 
 	# ————— GUI WINDOW INITIATION —————
-	titleframe.pack(pady = 45)
+	titleframe.pack(pady = (45, 30))
 	rose_panel.pack(side = LEFT)
 	titlelabel.pack(side = RIGHT)
 	textboxframe.pack()
-	textbox.pack(ipady = 10, side= LEFT)
+	textbox.pack(padx = (9, 0), ipady = 1, side= LEFT)
 	micbutton.pack(side = RIGHT)
 	sendbutton.pack(side = RIGHT)
 
@@ -123,18 +127,30 @@ def tksleep(self, time:float) -> None:
 	self.mainloop()
 Misc.tksleep = tksleep
 
-# ————— MIC ANIMATION AND ACTIVATION FUNCTION —————
-def Mic_Press(button_state, button, active_mic, inactive_mic):
+# ————— BUTTONS ANIMATION AND ACTIVATION FUNCTION —————
+def Button_Press(button_state, button):
 	match button_state:
 		case "Listening":
-			button.configure(image = active_mic)
-			button.image = active_mic
+			button.configure(image = GUI.active_mic)
+			button.image = GUI.active_mic
 			textbox.tksleep(0.1)
 			Output(Grammar_Check(Listen()))
-			Mic_Press("default", button, active_mic, inactive_mic)
+			Button_Press("Done Listening", button)
+
+		case "Done Listening":
+			button.configure(image = GUI.inactive_mic)
+			button.image = GUI.inactive_mic
+
+		case "Sending":
+			button.configure(image = GUI.clicked_send)
+			button.image = GUI.clicked_send
+			textbox.tksleep(0.1)
+			Button_Press("Default", button)
+			return textbox.get()
+
 		case _:
-			button.configure(image = inactive_mic)
-			button.image = inactive_mic
+			button.configure(image = GUI.default_send)
+			button.image = GUI.default_send
 	return
 
 # ————— SPEECH RECOGNITION FUNCTION —————

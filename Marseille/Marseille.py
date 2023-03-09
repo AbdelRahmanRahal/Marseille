@@ -4,7 +4,7 @@ import os, pyglet, pyttsx3, sys
 from gingerit.gingerit import GingerIt
 from gtts import gTTS
 from mutagen.mp3 import MP3
-from PIL import ImageTk, Image as PILImage
+from PIL import ImageTk, Image as PIL_Image
 from pygame import init, mixer
 from time import sleep
 from tkinter import *
@@ -20,21 +20,21 @@ def GUI():
 	# ————— GUI WINDOW SETTINGS —————
 	wndw = Tk()
 	wndw.title("Marseille")
-	wndw.geometry("500x500")
+	wndw.geometry("600x500")
 	wndw.iconbitmap("Media/rose.ico")
 	wndw.configure(bg = "#F3F4FA")
 	pyglet.font.add_file("Anaheim-Regular.ttf")
 
 	# ————— TITLE AREA —————
 	# ————— FRAME TO CONTAIN THE TITLE AND THE ICON —————
-	titleFrame = Frame(wndw, bg = "#F3F4FA")
+	titleframe = Frame(wndw, bg = "#F3F4FA")
 
 	# ————— ROSE ICON —————
-	rose_icon = PILImage.open("Media/rose.png")
-	rose_icon = rose_icon.resize((50, 50), PILImage.LANCZOS)
+	rose_icon = PIL_Image.open("Media/rose.png")
+	rose_icon = rose_icon.resize((50, 50), PIL_Image.LANCZOS)
 	rose_icon = ImageTk.PhotoImage(rose_icon)
 	rose_panel = Label(
-		master = titleFrame,
+		master = titleframe,
 		image = rose_icon,
 		bg = "#F3F4FA"
 	)
@@ -42,7 +42,7 @@ def GUI():
 
 	# ————— MARSEILLE TITLE —————
 	titlelabel = Label(
-		master = titleFrame,
+		master = titleframe,
 		text = "Marseille",
 		font = ("Anaheim", 40, "bold"),
 		fg = "#CB0025",
@@ -51,17 +51,17 @@ def GUI():
 
 	# ————— OUTPUT AREA —————
 	# ————— FRAME TO CONTAIN THE OUTPUT TEXTBOX AND THE BUTTONS —————
-	textboxFrame = Frame(wndw, bg = "#F3F4FA")
+	textboxframe = Frame(wndw, bg = "#F3F4FA")
 
 	# ————— TEXTBOX —————
 	global textbox
 	textbox = Entry(
-		master = textboxFrame, #30 characters is the max amount of characters for this label at this font size
+		master = textboxframe, #30 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
 		width = 30,
-		justify = CENTER,
+		justify = LEFT,
 		bd = 0
 	)
 	textbox.config(highlightthickness = 0, highlightbackground = "#000793")
@@ -69,48 +69,49 @@ def GUI():
 	# ————— BUTTON IMAGES —————
 	# ————— SEND BUTTON IMAGES —————
 	# ————— CLICKED SEND —————
-	clicked_send = PILImage.open("Media/send_clicked.png")
-	clicked_send = clicked_send.resize((40, 40), PILImage.LANCZOS)
+	clicked_send = PIL_Image.open("Media/send_clicked.png")
+	clicked_send = clicked_send.resize((40, 40), PIL_Image.LANCZOS)
 	clicked_send = ImageTk.PhotoImage(clicked_send)
 	# ————— DEFAULT MIC —————
-	default_send = PILImage.open("Media/send_default.png")
-	default_send = default_send.resize((30, 30), PILImage.LANCZOS)
+	default_send = PIL_Image.open("Media/send_default.png")
+	default_send = default_send.resize((30, 30), PIL_Image.LANCZOS)
 	default_send = ImageTk.PhotoImage(default_send)
 
 	# ————— MIC BUTTON IMAGES —————
 	# ————— ACTIVE MIC —————
-	active_mic = PILImage.open("Media/mic_active.png")
-	active_mic = active_mic.resize((40, 40), PILImage.LANCZOS)
+	active_mic = PIL_Image.open("Media/mic_active.png")
+	active_mic = active_mic.resize((40, 40), PIL_Image.LANCZOS)
 	active_mic = ImageTk.PhotoImage(active_mic)
 	# ————— INACTIVE MIC —————
-	inactive_mic = PILImage.open("Media/mic_inactive.png")
-	inactive_mic = inactive_mic.resize((40, 40), PILImage.LANCZOS)
+	inactive_mic = PIL_Image.open("Media/mic_inactive.png")
+	inactive_mic = inactive_mic.resize((40, 40), PIL_Image.LANCZOS)
 	inactive_mic = ImageTk.PhotoImage(inactive_mic)
 
 	# ————— SEND BUTTON —————
 	sendbutton = Label(
-		master = textboxFrame,
+		master = textboxframe,
 		image = default_send,
-		bg = "#F3F4FA"
+		bg = "#E8D1D9",
+		height = 48
 	)
 	sendbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", micbutton, active_mic, inactive_mic))
 	# ————— MIC BUTTON —————
 	micbutton = Label(
-		master = textboxFrame,
+		master = textboxframe,
 		image = inactive_mic,
-		bg = "#F3F4FA"
+		bg = "#E8D1D9",
+		height = 48
 	)
 	micbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", micbutton, active_mic, inactive_mic))
 
 	# ————— GUI WINDOW INITIATION —————
-	titleFrame.pack(pady = 45)
+	titleframe.pack(pady = 45)
 	rose_panel.pack(side = LEFT)
 	titlelabel.pack(side = RIGHT)
-	textboxFrame.pack()
+	textboxframe.pack()
 	textbox.pack(ipady = 10, side= LEFT)
-	micbutton.pack(pady = 20, side = RIGHT)
+	micbutton.pack(side = RIGHT)
 	sendbutton.pack(side = RIGHT)
-	
 
 	wndw.mainloop()
 

@@ -160,6 +160,7 @@ def Listen():
 
 	# ————— VOICE-TO-TEXT CONVERTER —————
 	while active:
+		print(">>> Taking voice input...")
 		try:
 			with sr.Microphone() as mic:
 				recognizer.adjust_for_ambient_noise(mic, duration = 0.1)
@@ -178,8 +179,8 @@ def Listen():
 
 # ————— CONVERTED TEXT OUTPUT FUNCTION —————
 def Output(output_text):
+	print(">>> Transcribed text:", output_text)
 	output_list = output_text.split()
-	print(output_list)
 
 	textbox.delete(0, END)
 	for word in output_list:

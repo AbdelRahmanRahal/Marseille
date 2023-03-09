@@ -25,6 +25,7 @@ def GUI():
 	wndw.configure(bg = "#F3F4FA")
 	pyglet.font.add_file("Anaheim-Regular.ttf")
 
+	# ————— TITLE AREA —————
 	# ————— FRAME TO CONTAIN THE TITLE AND THE ICON —————
 	titleFrame = Frame(wndw, bg = "#F3F4FA")
 
@@ -49,9 +50,13 @@ def GUI():
 	)
 
 	# ————— OUTPUT AREA —————
+	# ————— FRAME TO CONTAIN THE OUTPUT TEXTBOX AND THE BUTTONS —————
+	textboxFrame = Frame(wndw, bg = "#F3F4FA")
+
+	# ————— TEXTBOX —————
 	global textbox
 	textbox = Entry(
-		master = wndw, #30 characters is the max amount of characters for this label at this font size
+		master = textboxFrame, #30 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
@@ -61,30 +66,51 @@ def GUI():
 	)
 	textbox.config(highlightthickness = 0, highlightbackground = "#000793")
 
-	# ————— MIC IMAGES —————
+	# ————— BUTTON IMAGES —————
+	# ————— SEND BUTTON IMAGES —————
+	# ————— CLICKED SEND —————
+	clicked_send = PILImage.open("Media/send_clicked.png")
+	clicked_send = clicked_send.resize((40, 40), PILImage.LANCZOS)
+	clicked_send = ImageTk.PhotoImage(clicked_send)
+	# ————— DEFAULT MIC —————
+	default_send = PILImage.open("Media/send_default.png")
+	default_send = default_send.resize((30, 30), PILImage.LANCZOS)
+	default_send = ImageTk.PhotoImage(default_send)
+
+	# ————— MIC BUTTON IMAGES —————
 	# ————— ACTIVE MIC —————
 	active_mic = PILImage.open("Media/mic_active.png")
-	active_mic = active_mic.resize((55, 55), PILImage.LANCZOS)
+	active_mic = active_mic.resize((40, 40), PILImage.LANCZOS)
 	active_mic = ImageTk.PhotoImage(active_mic)
 	# ————— INACTIVE MIC —————
 	inactive_mic = PILImage.open("Media/mic_inactive.png")
-	inactive_mic = inactive_mic.resize((55, 55), PILImage.LANCZOS)
+	inactive_mic = inactive_mic.resize((40, 40), PILImage.LANCZOS)
 	inactive_mic = ImageTk.PhotoImage(inactive_mic)
 
+	# ————— SEND BUTTON —————
+	sendbutton = Label(
+		master = textboxFrame,
+		image = default_send,
+		bg = "#F3F4FA"
+	)
+	sendbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", micbutton, active_mic, inactive_mic))
 	# ————— MIC BUTTON —————
-	listenbutton = Label(
-		master = wndw,
+	micbutton = Label(
+		master = textboxFrame,
 		image = inactive_mic,
 		bg = "#F3F4FA"
 	)
-	listenbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", listenbutton, active_mic, inactive_mic))
+	micbutton.bind("<Button-1>", lambda event: Mic_Press("Listening", micbutton, active_mic, inactive_mic))
 
 	# ————— GUI WINDOW INITIATION —————
 	titleFrame.pack(pady = 45)
 	rose_panel.pack(side = LEFT)
 	titlelabel.pack(side = RIGHT)
-	textbox.pack(ipady = 10)
-	listenbutton.pack(pady = 20)
+	textboxFrame.pack()
+	textbox.pack(ipady = 10, side= LEFT)
+	micbutton.pack(pady = 20, side = RIGHT)
+	sendbutton.pack(side = RIGHT)
+	
 
 	wndw.mainloop()
 

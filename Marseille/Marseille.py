@@ -5,7 +5,7 @@ from gingerit.gingerit import GingerIt
 from gtts import gTTS
 from mutagen.mp3 import MP3
 from PIL import ImageTk, Image as PIL_Image
-os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Cancel the pygame welcome message, sorry it was getting on my nerves :(
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Cancels the pygame welcome message, sorry it was getting on my nerves :(
 from pygame import init, mixer
 from time import sleep
 from tkinter import *
@@ -99,7 +99,7 @@ def GUI():
 		bg = "#E8D1D9",
 		height = 48
 	)
-	sendbutton.bind("<Button-1>", lambda event: Button_Press("Sending", sendbutton))
+	sendbutton.bind("<Button-1>", lambda event: print(">>> Fetched text:", Button_Press("Sending", sendbutton)))
 
 	# ————— MIC BUTTON —————
 	micbutton = Label(

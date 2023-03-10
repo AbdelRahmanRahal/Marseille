@@ -92,10 +92,7 @@ def GUI():
 	GUI.inactive_mic = ImageTk.PhotoImage(GUI.inactive_mic)
 
 	# ————— BUTTONS —————
-	global button_height
-	button_height = IntVar(wndw, 48)
 	# ————— SEND BUTTON —————
-	global sendbutton
 	sendbutton = Label(
 		master = textboxframe,
 		image = GUI.default_send,
@@ -105,7 +102,6 @@ def GUI():
 	sendbutton.bind("<Button-1>", lambda event: Button_Press("Sending", sendbutton))
 
 	# ————— MIC BUTTON —————
-	global micbutton
 	micbutton = Label(
 		master = textboxframe,
 		image = GUI.inactive_mic,
@@ -188,19 +184,8 @@ def Output(output_text):
 	print(">>> Transcribed text:", output_text)
 	output_list = output_text.split()
 
-	textbox.config(height = 1)
-	sendbutton.config(height = 48)
-	micbutton.config(height = 48)
 	textbox.delete(1.0, END)
-
-	txtboxvalue = ""
 	for word in output_list:
-		txtboxvalue = txtboxvalue + (word + " ")
-		if len(txtboxvalue) > 26:
-			textbox.config(height = 2)
-			sendbutton.config(height = 78)
-			micbutton.config(height = 78)
-
 		textbox.insert(END, word + " ")
 		textbox.tksleep(0.1)
 	return

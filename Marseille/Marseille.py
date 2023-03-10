@@ -56,13 +56,15 @@ def GUI():
 
 	# ————— TEXTBOX —————
 	global textbox
-	textbox = Entry(
+	textbox = Text(
 		master = textboxframe, #27 characters is the max amount of characters for this label at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
 		width = 29,
-		justify = LEFT,
+		height = 1,
+		wrap = WORD,
+		# justify = LEFT,
 		bd = 9,
 		relief = FLAT
 	)
@@ -90,7 +92,10 @@ def GUI():
 	GUI.inactive_mic = ImageTk.PhotoImage(GUI.inactive_mic)
 
 	# ————— BUTTONS —————
+	global button_height
+	button_height = IntVar(wndw, 48)
 	# ————— SEND BUTTON —————
+	global sendbutton
 	sendbutton = Label(
 		master = textboxframe,
 		image = GUI.default_send,
@@ -100,6 +105,7 @@ def GUI():
 	sendbutton.bind("<Button-1>", lambda event: Button_Press("Sending", sendbutton))
 
 	# ————— MIC BUTTON —————
+	global micbutton
 	micbutton = Label(
 		master = textboxframe,
 		image = GUI.inactive_mic,
@@ -146,7 +152,7 @@ def Button_Press(button_state, button):
 			button.image = GUI.clicked_send
 			textbox.tksleep(0.1)
 			Button_Press("Default", button)
-			return textbox.get()
+			return textbox.get(1.0, END)
 
 		case _:
 			button.configure(image = GUI.default_send)
@@ -182,8 +188,19 @@ def Output(output_text):
 	print(">>> Transcribed text:", output_text)
 	output_list = output_text.split()
 
-	textbox.delete(0, END)
+	textbox.config(height = 1)
+	sendbutton.config(height = 48)
+	micbutton.config(height = 48)
+	textbox.delete(1.0, END)
+
+	txtboxvalue = ""
 	for word in output_list:
+		txtboxvalue = txtboxvalue + (word + " ")
+		if len(txtboxvalue) > 26:
+			textbox.config(height = 2)
+			sendbutton.config(height = 78)
+			micbutton.config(height = 78)
+
 		textbox.insert(END, word + " ")
 		textbox.tksleep(0.1)
 	return

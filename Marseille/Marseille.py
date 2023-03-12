@@ -1,6 +1,6 @@
 # ————— LIBRARY AND MODULE CALLS —————
 import speech_recognition as sr
-import os, pyglet, pyttsx3, sys
+import threading, os, pyglet, pyttsx3, sys
 from gingerit.gingerit import GingerIt
 from gtts import gTTS
 from mutagen.mp3 import MP3
@@ -57,7 +57,7 @@ def GUI():
 	# ————— TEXTBOX —————
 	global textbox
 	textbox = Text(
-		master = textboxframe, #27 characters is the max amount of characters for this label at this font size
+		master = textboxframe, #26 characters is the max amount of characters at this font size
 		font = ("Anaheim", 17),
 		fg = "#700018",
 		bg = "#E8D1D9",
@@ -119,9 +119,32 @@ def GUI():
 	micbutton.pack(side = RIGHT)
 	sendbutton.pack(side = RIGHT)
 
+	threading.Thread(target = Textbox_Height, daemon = True, args = (sendbutton, micbutton)).start()
 	wndw.mainloop()
 
 	return
+
+# ————— TEXTBOX HEIGHT UPDATE FUNCTION —————
+def Textbox_Height(sbutton, mbutton):
+	# ————— DEFAULT/STARTING HEIGHT VALUES —————
+	textbox_height = 1
+	button_height = 48
+
+	while True:
+		truelen = len(textbox.get(1.0, END)) - 1 # Tkinter empty textboxes still have 1 "character". Probably \0 or something, idk. Basically, Tkinter counts from 1.
+
+		if (truelen % 26 == 0) and (truelen != 0):
+			textbox_height = 1 + truelen // 26
+			button_height = 48 + (truelen * (30 / 26))
+		elif (truelen // 26) <= (textbox_height - 2):
+			textbox_height -= 1
+			button_height -= 30
+
+		textbox.config(height = textbox_height)
+		sbutton.config(height = button_height)
+		mbutton.config(height = button_height)
+
+		sleep(0.1) # The smaller the value, the less chance the code won't pick up fast typing. However, it takes more CPU.
 
 # ————— SLEEP FUNCTION FOR TKINTER —————
 def tksleep(self, time:float) -> None:

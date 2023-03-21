@@ -1,9 +1,16 @@
-from PySide6.QtWidgets import QApplication, QMainWindow, QPushButton
+from PySide6.QtWidgets import QMainWindow, QPushButton
 import sys
 
-class TestWindow(QMainWindow):
+class MainWindow(QMainWindow):
 	def __init__(self):
 		super().__init__()
-		self.setWindowTitle("A test window of sorts")
-		button = QPushButton("A button of sorts (press me)")
-		self.setCentralWidget(button)
+		self.setWindowTitle("Marseille")
+		# button = QPushButton("A button of sorts (press me)")
+		# self.setCentralWidget(button)
+
+class SendButton(QPushButton):
+	def __init__(self):
+		super().__init__()
+		self.QPushButton("A peculiar button...")
+		# self.setText("A peculiar button")
+		MainWindow.setCentralWidget(SendButton)

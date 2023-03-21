@@ -18,7 +18,7 @@ def main():
 def Start_GUI():
 	app = QApplication(sys.argv)
 
-	window = TestWindow()
+	window = MainWindow()
 	window.show()
 
 	app.exec()

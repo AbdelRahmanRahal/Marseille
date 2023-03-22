@@ -6,25 +6,15 @@ from mutagen.mp3 import MP3
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # Cancels the pygame welcome message, sorry it was getting on my nerves :(
 from pygame import init, mixer
 from time import sleep
-from PySide6.QtWidgets import QApplication
 from GUI import *
 
 
 # ————— MAIN FUNCTION —————
 def main():
 	print(">>> Initialising Marseille...")
-	Start_GUI()
+	GUI_Initiation()
 
-def Start_GUI():
-	app = QApplication(sys.argv)
-
-	window = MainWindow()
-	window.show()
-
-	app.exec()
-
-	return
-
+# ————— SPEECH RECOGNITION FUNCTION —————
 def Listen():
 	active = True
 	recognizer = sr.Recognizer()

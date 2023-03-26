@@ -14,6 +14,8 @@ def main():
 	print(">>> Initialising Marseille...")
 	GUI_Initiation()
 
+	return
+
 # ————— SPEECH RECOGNITION FUNCTION —————
 def Listen():
 	active = True

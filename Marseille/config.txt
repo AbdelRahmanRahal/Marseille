@@ -1,3 +1,4 @@
+// Default configurations in default_config.txt
 open_window_on_startup:True
 minimise_in_tray_on_quit:False
 window_width:800

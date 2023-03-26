@@ -8,6 +8,7 @@ def GUI_Initiation():
 	# ————— LOAD USER CONFIGURATION —————
 	global loaded_config
 	loaded_config = load_config()
+	print(loaded_config)
 	for config, value in loaded_config.items():
 		print(f">>> {config} : {value}")
 
@@ -25,16 +26,18 @@ def GUI_Initiation():
 
 	return
 
+# ————— CONFIGURATION LOAD FUNCTION —————
 def load_config():
 	config = {}
-	file = open("config.txt", "r")
-	# config_lines = file.read().split("\n")
-	config_lines = file.readlines()
-	file.close()
+	with open("config.txt", "r") as file:
+		for line in file.readlines():
+			# ————— TEXT WRITTEN AFTER "//" WILL NOT BE READ. "//" IS A COMMENT OPERATOR —————
+			if line.startswith("//"):
+				continue
 
-	for line in config_lines:
-		config_split = line.split(":")
-		config[config_split[0]] = eval(config_split[1])
+			# ————— CONFIG LINE APPEND —————
+			config_split = line.strip("\n").split(":")
+			config[config_split[0]] = eval(config_split[1])
 
 	return config
 

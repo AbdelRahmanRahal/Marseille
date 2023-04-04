@@ -1,4 +1,4 @@
-// Default configurations in default_config.txt
+// Seperate each config in a line. No spaces.
 open_window_on_startup:True
 minimise_in_tray_on_quit:True
 window_width:800
